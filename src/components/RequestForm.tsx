@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import type { BorrowRequest, TokenSymbol } from "@/types";
 import { ArchitectureLabel } from "./ArchitectureLabel";
 import { usePoolInfo } from "@/hooks/usePoolInfo";
@@ -18,28 +18,8 @@ export function RequestForm({ onSubmit, disabled }: Props) {
   const [collateralAmount, setCollateralAmount] = useState("0.5");
   const [borrowToken, setBorrowToken] = useState<string>("USDC");
   const [borrowAmount, setBorrowAmount] = useState("500");
-  const [walletAddress, setWalletAddress] = useState("");
-  const [walletLoading, setWalletLoading] = useState(true);
-  const [walletLabel, setWalletLabel] = useState("");
-  const [walletBalance, setWalletBalance] = useState("");
-  const [walletCoin, setWalletCoin] = useState("");
 
   const { poolInfo, loading: poolLoading } = usePoolInfo();
-
-  useEffect(() => {
-    fetch("/api/bitgo/wallet")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.address) {
-          setWalletAddress(data.address);
-          setWalletLabel(data.label || "BitGo Custody Wallet");
-          setWalletBalance(data.balanceETH || "0");
-          setWalletCoin(data.coin || "");
-        }
-      })
-      .catch(() => {})
-      .finally(() => setWalletLoading(false));
-  }, []);
 
   const borrowMetrics = useMemo(() => {
     if (!poolInfo) return null;
@@ -56,14 +36,7 @@ export function RequestForm({ onSubmit, disabled }: Props) {
       ? (collateralValueUSD * poolInfo.liquidationThreshold) / borrowValueUSD
       : Infinity;
 
-    return {
-      collateralValueUSD,
-      maxBorrow,
-      borrowValueUSD,
-      utilization,
-      healthFactor,
-      colPrice,
-    };
+    return { collateralValueUSD, maxBorrow, borrowValueUSD, utilization, healthFactor };
   }, [collateralAmount, borrowAmount, poolInfo]);
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -73,7 +46,7 @@ export function RequestForm({ onSubmit, disabled }: Props) {
       collateralAmount,
       borrowToken,
       borrowAmount,
-      walletAddress: walletAddress || "0x0000000000000000000000000000000000000000",
+      walletAddress: "0x0000000000000000000000000000000000000000",
     });
   };
 
@@ -166,10 +139,6 @@ export function RequestForm({ onSubmit, disabled }: Props) {
       {borrowMetrics && !poolLoading && (
         <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 p-3 space-y-2 text-sm">
           <div className="flex justify-between">
-            <span className="text-zinc-500 dark:text-zinc-400">WETH Price</span>
-            <span className="font-medium">${borrowMetrics.colPrice.toLocaleString()}</span>
-          </div>
-          <div className="flex justify-between">
             <span className="text-zinc-500 dark:text-zinc-400">Collateral Value</span>
             <span className="font-medium">${borrowMetrics.collateralValueUSD.toLocaleString(undefined, { maximumFractionDigits: 2 })}</span>
           </div>
@@ -210,46 +179,6 @@ export function RequestForm({ onSubmit, disabled }: Props) {
       {poolLoading && (
         <div className="text-xs text-zinc-400 animate-pulse">Loading market data...</div>
       )}
-
-      <div>
-        <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1">
-          Custody Wallet
-        </label>
-        {walletLoading ? (
-          <div className="text-xs text-zinc-400 animate-pulse py-2">Connecting to BitGo...</div>
-        ) : walletAddress && walletLabel ? (
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 px-3 py-2 space-y-2">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center rounded-md bg-sky-100 dark:bg-sky-900/30 px-2 py-0.5 text-xs font-medium text-sky-700 dark:text-sky-300">
-                  BitGo
-                </span>
-                <span className="text-sm text-zinc-700 dark:text-zinc-300">{walletLabel}</span>
-              </div>
-              <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                {parseFloat(walletBalance).toFixed(4)} {walletCoin.toUpperCase()}
-              </span>
-            </div>
-            <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 truncate" data-testid="wallet-address">
-              {walletAddress}
-            </div>
-          </div>
-        ) : (
-          <div className="rounded-lg border border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-900/20 px-3 py-2">
-            <div className="text-xs text-amber-700 dark:text-amber-400">
-              BitGo wallet not connected — using demo mode
-            </div>
-            <input
-              type="text"
-              value={walletAddress}
-              onChange={(e) => setWalletAddress(e.target.value)}
-              className="w-full mt-1 rounded border border-zinc-300 dark:border-zinc-600 bg-white dark:bg-zinc-800 px-2 py-1 text-xs font-mono"
-              placeholder="0x... (optional)"
-              disabled={disabled}
-            />
-          </div>
-        )}
-      </div>
 
       <button
         type="submit"

@@ -3,6 +3,7 @@
 import { RequestForm } from "@/components/RequestForm";
 import { AgentReasoning } from "@/components/AgentReasoning";
 import { TransactionStatus } from "@/components/TransactionStatus";
+import { AccountSummary } from "@/components/AccountSummary";
 import { useAgentStream } from "@/hooks/useAgentStream";
 
 export default function Home() {
@@ -74,6 +75,11 @@ export default function Home() {
               </p>
             </div>
           </div>
+        </div>
+
+        {/* Account Summary */}
+        <div className="mb-6">
+          <AccountSummary />
         </div>
 
         {/* Three-column layout */}
