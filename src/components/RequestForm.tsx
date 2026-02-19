@@ -21,6 +21,8 @@ export function RequestForm({ onSubmit, disabled }: Props) {
   const [walletAddress, setWalletAddress] = useState("");
   const [walletLoading, setWalletLoading] = useState(true);
   const [walletLabel, setWalletLabel] = useState("");
+  const [walletBalance, setWalletBalance] = useState("");
+  const [walletCoin, setWalletCoin] = useState("");
 
   const { poolInfo, loading: poolLoading } = usePoolInfo();
 
@@ -31,6 +33,8 @@ export function RequestForm({ onSubmit, disabled }: Props) {
         if (data.address) {
           setWalletAddress(data.address);
           setWalletLabel(data.label || "BitGo Custody Wallet");
+          setWalletBalance(data.balanceETH || "0");
+          setWalletCoin(data.coin || "");
         }
       })
       .catch(() => {})
@@ -214,14 +218,19 @@ export function RequestForm({ onSubmit, disabled }: Props) {
         {walletLoading ? (
           <div className="text-xs text-zinc-400 animate-pulse py-2">Connecting to BitGo...</div>
         ) : walletAddress && walletLabel ? (
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 px-3 py-2">
-            <div className="flex items-center gap-2">
-              <span className="inline-flex items-center rounded-md bg-sky-100 dark:bg-sky-900/30 px-2 py-0.5 text-xs font-medium text-sky-700 dark:text-sky-300">
-                BitGo
+          <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50 px-3 py-2 space-y-2">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center rounded-md bg-sky-100 dark:bg-sky-900/30 px-2 py-0.5 text-xs font-medium text-sky-700 dark:text-sky-300">
+                  BitGo
+                </span>
+                <span className="text-sm text-zinc-700 dark:text-zinc-300">{walletLabel}</span>
+              </div>
+              <span className="text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                {parseFloat(walletBalance).toFixed(4)} {walletCoin.toUpperCase()}
               </span>
-              <span className="text-sm text-zinc-700 dark:text-zinc-300">{walletLabel}</span>
             </div>
-            <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 mt-1 truncate" data-testid="wallet-address">
+            <div className="text-xs font-mono text-zinc-500 dark:text-zinc-400 truncate" data-testid="wallet-address">
               {walletAddress}
             </div>
           </div>
