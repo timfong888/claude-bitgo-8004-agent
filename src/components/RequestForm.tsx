@@ -4,8 +4,8 @@ import { useState } from "react";
 import type { BorrowRequest, TokenSymbol } from "@/types";
 import { ArchitectureLabel } from "./ArchitectureLabel";
 
-const COLLATERAL_TOKENS: TokenSymbol[] = ["WETH", "WBTC"];
-const BORROW_TOKENS: TokenSymbol[] = ["USDC", "DAI", "USDT", "GHO"];
+const COLLATERAL_TOKENS: TokenSymbol[] = ["WETH"];
+const BORROW_TOKENS: TokenSymbol[] = ["USDC"];
 
 interface Props {
   onSubmit: (request: BorrowRequest) => void;

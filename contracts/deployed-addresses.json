@@ -1,0 +1,9 @@
+{
+  "chain": "hoodi",
+  "rpc": "https://sepolia.drpc.org",
+  "mockWETH": "0xe328164d19df0cf00cc9F8E9EaB0127AD09E5904",
+  "mockUSDC": "0x399E60192E44215CAC77E2cE64C847C52830f42C",
+  "mockAavePool": "0xF2574c9D3114D7cb499f499F10341f390F4B00a4",
+  "deployer": "0xaCB312CAa0Df33aBaf1cA341FC7DDF8D043Cc8AD",
+  "deployedAt": "2026-02-19T15:56:15.048Z"
+}

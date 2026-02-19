@@ -1,4 +1,4 @@
-export type TokenSymbol = "WETH" | "USDC" | "DAI" | "WBTC" | "USDT" | "GHO";
+export type TokenSymbol = "WETH" | "USDC";
 
 export interface BorrowRequest {
   collateralToken: string;

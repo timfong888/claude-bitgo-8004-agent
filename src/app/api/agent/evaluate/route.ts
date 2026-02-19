@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
         try {
           const txRequest = await createTransactionRequest({
-            to: "0x6Ae43d3271ff6888e7Fc43Fd7321a503ff738951", // Aave Pool
+            to: "0xF2574c9D3114D7cb499f499F10341f390F4B00a4", // MockAavePool on Sepolia
             data: "0x", // Placeholder — real calldata would come from agent
             value: "0",
             comment: `Agent risk score: ${result.evaluation.riskScore} | HF: ${result.evaluation.healthFactor}`,

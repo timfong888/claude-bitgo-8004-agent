@@ -15,11 +15,10 @@ HARD RULES (never override):
 - FLAG infinite token approvals (amount > 10x needed)
 - FLAG health factor between 1.0 and 1.5 as HIGH RISK
 
-ALLOWLISTED CONTRACTS:
-- Aave V3 Pool: ${AAVE_CONTRACTS.pool}
-- WETH: ${TOKENS.WETH}
-- USDC: ${TOKENS.USDC}
-- DAI: ${TOKENS.DAI}
+ALLOWLISTED CONTRACTS (MockAavePool on Sepolia):
+- Lending Pool: ${AAVE_CONTRACTS.pool}
+- WETH (collateral): ${TOKENS.WETH}
+- USDC (borrow): ${TOKENS.USDC}
 
 For every evaluation, you MUST:
 1. Check the user's current Aave position (health factor, collateral, debt)
